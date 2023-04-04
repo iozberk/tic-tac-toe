@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tic Tac Toe</title>
+<style>* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #f9fafb;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 50px auto;
+}
+
+h1 {
+  margin-bottom: 30px;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #1f1f1f;
+}
+
+.board {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+}
+
+.row {
+  display: flex;
+}
+
+.square {
+  width: 80px;
+  height: 80px;
+  margin: 0 10px 10px 0;
+  border-radius: 5px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: bold;
+  color: #666;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+.winner {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 50px;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1f1f1f;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.square:hover {
+  background-color: #e1e1e1;
+}
+
+.square[data-value="X"] {
+  color: #e64980;
+}
+
+.square[data-value="O"] {
+  color: #0072c6;
+}
+
+.status {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1f1f1f;
+  margin-bottom: 20px;
+}
+
+.reset-btn {
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: #1f1f1f;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.reset-btn:hover {
+  background-color: #111;
+}
+</style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Tic Tac Toe</h1>
+      <div class="board">
+        <div class="row">
+          <div class="square" data-square="0"></div>
+          <div class="square" data-square="1"></div>
+          <div class="square" data-square="2"></div>
+        </div>
+        <div class="row">
+          <div class="square" data-square="3"></div>
+          <div class="square" data-square="4"></div>
+          <div class="square" data-square="5"></div>
+        </div>
+        <div class="row">
+          <div class="square" data-square="6"></div>
+          <div class="square" data-square="7"></div>
+          <div class="square" data-square="8"></div>
+        </div>
+      </div>
+      <div class="status"></div>
+      <div class="winner" id="winner"></div>
+      <button class="reset-btn" id="reset-btn">Reset Game</button>
+
+    </div>
+    <script>
+const resetButton = document.getElementById('reset-btn');
+resetButton.addEventListener('click', resetGame);
+function resetGame() {
+  squares.forEach((square) => {
+    square.textContent = '';
+  });
+  winnerElement.textContent = '';
+  currentPlayer = 'X';
+  moves = 0;
+  squares.forEach((square) => {
+    square.addEventListener('click', handleClick);
+  });
+}
+
+const squares = document.querySelectorAll('.square');
+let currentPlayer = 'X';
+let moves = 0;
+const winnerElement = document.getElementById('winner');
+
+squares.forEach((square) => {
+  square.addEventListener('click', handleClick);
+});
+
+function handleClick(event) {
+  if (event.target.textContent !== '') {
+    return;
+  }
+
+  event.target.textContent = currentPlayer;
+  moves++;
+
+  if (checkForWinner()) {
+    winnerElement.textContent = `Player ${currentPlayer} wins!`;
+    disableSquares();
+  } else if (moves === 9) {
+    winnerElement.textContent = 'Tie game!';
+  } else {
+    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+  }
+}
+
+function checkForWinner() {
+  const winningCombinations = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
+  return winningCombinations.some((combination) => {
+    const [a, b, c] = combination;
+
+    return (
+      squares[a].textContent !== '' &&
+      squares[a].textContent === squares[b].textContent &&
+      squares[a].textContent === squares[c].textContent
+    );
+  });
+}
+// Assuming you have some code that checks if the winner is active and sets the variable winnerActive accordingly
+const winnerActive = true;
+
+if (winnerActive) {
+  const winnerElement = document.getElementById('winner');
+  winnerElement.style.display = 'flex';
+}
+
+function disableSquares() {
+  squares.forEach((square) => {
+    square.removeEventListener('click', handleClick);
+  });
+}
+
+
+    </script>
+  </body>
+</html>
